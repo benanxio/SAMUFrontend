@@ -1,9 +1,10 @@
-import { RootState } from "@/src/redux/store";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { Ripple } from "primereact/ripple";
 import { StyleClass } from "primereact/styleclass";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import useLogin from "../Login/hooks/useLogin";
 import { verifyToken } from "../Login/redux/useCases/verify-token";
 import LoadingScreen from "./LoadingScreen";
 const Layout = ({ children }: any) => {
@@ -12,7 +13,8 @@ const Layout = ({ children }: any) => {
   const btnRef11 = useRef(null);
   const btnRef12 = useRef(null);
   const [loading, setLoading] = useState(true);
-  const { isAuthenticated } = useSelector((state: RootState) => state.Login);
+
+  const { logOutApp, isAuthenticated } = useLogin();
   const router = useRouter();
 
   useEffect(() => {
@@ -23,6 +25,7 @@ const Layout = ({ children }: any) => {
         router.push("/login");
       }
     };
+
     fetch();
   }, []);
 
@@ -50,13 +53,13 @@ const Layout = ({ children }: any) => {
                 <div className="mt-3">
                   <ul className="list-none p-0 m-0">
                     <li>
-                      <a className="p-ripple flex flex-row lg:flex-column align-items-center cursor-pointer p-3 lg:justify-content-center text-cyan-600 border-left-2 border-cyan-600 hover:border-300 transition-duration-150 transition-colors">
+                      <Link href="/" className="p-ripple flex flex-row lg:flex-column align-items-center cursor-pointer p-3 lg:justify-content-center text-cyan-600 border-left-2 border-cyan-600 hover:border-300 transition-duration-150 transition-colors">
                         <i className="pi pi-home mr-2 lg:mr-0 mb-0 lg:mb-2 text-base lg:text-2xl"></i>
                         <span className="font-medium inline text-base lg:text-xs lg:block">
                           Home
                         </span>
                         <Ripple />
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <a className="p-ripple flex flex-row lg:flex-column align-items-center cursor-pointer p-3 lg:justify-content-center text-600 border-left-2 border-transparent hover:border-300 transition-duration-150 transition-colors">
@@ -68,84 +71,29 @@ const Layout = ({ children }: any) => {
                       </a>
                     </li>
                     <li>
-                      <a className="p-ripple flex flex-row lg:flex-column align-items-center cursor-pointer p-3 lg:justify-content-center text-600 border-left-2 border-transparent hover:border-300 transition-duration-150 transition-colors">
+                      <Link
+                        href="/upload"
+                        className="p-ripple flex flex-row lg:flex-column align-items-center cursor-pointer p-3 lg:justify-content-center text-600 border-left-2 border-transparent hover:border-300 transition-duration-150 transition-colors"
+                      >
                         <i className="pi pi-users mr-2 lg:mr-0 mb-0 lg:mb-2 text-base lg:text-2xl"></i>
                         <span className="font-medium inline text-base lg:text-xs lg:block">
-                          Team
+                          Upload
                         </span>
                         <Ripple />
-                      </a>
+                      </Link>
                     </li>
-                    <li className="relative">
-                      <StyleClass
-                        nodeRef={btnRef10}
-                        selector="@next"
-                        enterClassName="hidden"
-                        leaveToClassName="hidden"
-                        hideOnOutsideClick
-                      >
-                        <a
-                          ref={btnRef10}
-                          className="p-ripple flex flex-row lg:flex-column align-items-center cursor-pointer p-3 lg:justify-content-center text-600 border-left-2 border-transparent hover:border-300 transition-duration-150 transition-colors"
-                        >
-                          <span className="font-medium inline text-base lg:text-xs lg:block">
-                            Reports
-                          </span>
-                          <i className="pi pi-chevron-down ml-auto lg:hidden"></i>
-                          <Ripple />
-                        </a>
-                      </StyleClass>
-                      <ul className="list-none pl-3 pr-0 py-0 lg:p-3 m-0 hidden overflow-y-hidden transition-all transition-duration-400 transition-ease-in-out static border-round-right lg:absolute left-100 top-0 z-1 surface-overlay shadow-none lg:shadow-2 w-full lg:w-15rem">
-                        <li>
-                          <StyleClass
-                            nodeRef={btnRef11}
-                            selector="@next"
-                            toggleClassName="hidden"
-                          >
-                            <a
-                              ref={btnRef11}
-                              className="p-ripple flex align-items-center cursor-pointer p-3 hover:surface-100 hover:text-900 border-round text-600 hover:text-700 transition-duration-150 transition-colors"
-                            >
-                              <i className="pi pi-chart-line mr-2"></i>
-                              <span className="font-medium">Revenue</span>
-                              <i className="pi pi-chevron-down ml-auto"></i>
-                              <Ripple />
-                            </a>
-                          </StyleClass>
-                          <ul className="list-none py-0 pl-3 pr-0 m-0 hidden overflow-y-hidden transition-all transition-duration-400 transition-ease-in-out">
-                            <li>
-                              <a className="p-ripple flex align-items-center cursor-pointer p-3 hover:surface-100 hover:text-900 border-round text-600 hover:text-700 transition-duration-150 transition-colors">
-                                <i className="pi pi-table mr-2"></i>
-                                <span className="font-medium">View</span>
-                                <Ripple />
-                              </a>
-                            </li>
-                            <li>
-                              <a className="p-ripple flex align-items-center cursor-pointer p-3 hover:surface-100 hover:text-900 border-round text-600 hover:text-700 transition-duration-150 transition-colors">
-                                <i className="pi pi-search mr-2"></i>
-                                <span className="font-medium">Search</span>
-                                <Ripple />
-                              </a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a className="p-ripple flex align-items-center cursor-pointer p-3 hover:surface-100 hover:text-900 border-round text-600 hover:text-700 transition-duration-150 transition-colors">
-                            <i className="pi pi-chart-line mr-2"></i>
-                            <span className="font-medium">Expenses</span>
-                            <Ripple />
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
+
                     <li>
-                      <a className="p-ripple flex flex-row lg:flex-column align-items-center cursor-pointer p-3 lg:justify-content-center text-600 border-left-2 border-transparent hover:border-300 transition-duration-150 transition-colors">
-                        <i className="pi pi-calendar mr-2 lg:mr-0 mb-0 lg:mb-2 text-base lg:text-2xl"></i>
+                      <Link
+                        href="/reports"
+                        className="p-ripple flex flex-row lg:flex-column align-items-center cursor-pointer p-3 lg:justify-content-center text-600 border-left-2 border-transparent hover:border-300 transition-duration-150 transition-colors"
+                      >
+                        <i className="pi pi-chart-bar mr-2 lg:mr-0 mb-0 lg:mb-2 text-base lg:text-2xl"></i>
                         <span className="font-medium inline text-base lg:text-xs lg:block">
-                          Events
+                          Reportes
                         </span>
                         <Ripple />
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <a className="p-ripple flex flex-row lg:flex-column align-items-center cursor-pointer p-3 lg:justify-content-center text-600 border-left-2 border-transparent hover:border-300 transition-duration-150 transition-colors">
@@ -160,10 +108,11 @@ const Layout = ({ children }: any) => {
                 </div>
                 <div className="mt-auto">
                   <hr className="mb-3 mx-3 border-top-1 border-none surface-border" />
-                  <a className="p-ripple m-3 flex flex-row lg:flex-column align-items-center cursor-pointer p-3 lg:justify-content-center hover:surface-200 border-round text-600 transition-duration-150 transition-colors">
-                    <span className="font-medium inline lg:hidden">
-                      Amy Elsner
-                    </span>
+                  <a
+                    onClick={() => logOutApp()}
+                    className="p-ripple m-3 flex flex-row lg:flex-column align-items-center cursor-pointer p-3 lg:justify-content-center hover:surface-200 border-round text-600 transition-duration-150 transition-colors"
+                  >
+                    <i className="pi pi-sign-out"></i>
                     <Ripple />
                   </a>
                 </div>

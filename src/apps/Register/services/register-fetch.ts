@@ -1,33 +1,45 @@
 import { siteURL } from "@/src/lib/envs";
-import axios, { CancelTokenSource } from "axios";
-import { RegisterErrors, UserRegisterData } from "../models/register.models";
-interface Response {
-  errors?: RegisterErrors;
-  isCreated?: boolean;
-}
-export const registerFetch = async (user: UserRegisterData) => {
+import {
+  ServiceFetchResponse,
+  responseServiceState,
+  returnNetworkError,
+} from "@/src/lib/error-https-services";
+import axios, { AxiosResponse, CancelTokenSource } from "axios";
+import { UserRegisterData } from "../register.models";
+
+export const registerFetch = async (
+  user: UserRegisterData
+): Promise<ServiceFetchResponse> => {
   const source: CancelTokenSource = axios.CancelToken.source();
 
   try {
-    const response = await axios.post(`${siteURL}/auth/users/`, user, {
-      cancelToken: source.token,
-    });
+    const response: AxiosResponse = await axios.post(
+      `${siteURL}/auth/users/`,
+      user,
+      {
+        cancelToken: source.token,
+      }
+    );
     if (response.status == 201) {
-        return {
-        isCreated: true,
-        errors: {},
+      return {
+        ...responseServiceState,
+        HTTPstatus: response.status,
       };
     } else {
       return {
-        isCreated: false,
-        errors: response.data,
+        ...responseServiceState,
+        isSuccess: false,
+        HTTPstatus: response.status,
+        errors: response?.data,
       };
     }
-  } catch (error: any) {
-      console.log(error);
+  } catch (e: any) {
+    if (e.code === "ERR_NETWORK") return returnNetworkError;
     return {
-      isCreated: false,
-      errors: error.response.data,
+      ...responseServiceState,
+      isSuccess: false,
+      HTTPstatus: e?.response?.status,
+      errors: e?.response?.data,
     };
   } finally {
     source.cancel();

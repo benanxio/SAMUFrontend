@@ -1,40 +1,48 @@
 import { siteURL } from "@/src/lib/envs";
-import axios, { CancelTokenSource } from "axios";
-import { DataResponseFetch, ResetPasswordAuth } from "../models";
+import {
+    ServiceFetchResponse,
+    responseServiceState,
+    returnNetworkError,
+} from "@/src/lib/error-https-services";
+import axios, { AxiosResponse, CancelTokenSource } from "axios";
+import { ResetPasswordAuth } from "../auth.models";
 
-const resetPasswordFetch = async (data: ResetPasswordAuth): Promise<DataResponseFetch> => {
-
-    const source: CancelTokenSource = axios.CancelToken.source();
-    try {
-        const response = await axios.post(
-            `${siteURL}/users/reset_password_confirm/`,
-            data,
-            {
-                cancelToken: source.token,
-            }
-        );
-        if (response.status === 204) {
-            return {
-                state: response.status,
-                isSuccess: true,
-                errors: {},
-            };
-        } else {
-            return {
-                state: 400,
-                isSuccess: false,
-                errors: response.data,
-            };
-        }
-    } catch (error: any) {
-        return {
-            state: 0,
-            isSuccess: false,
-            errors: {},
-        };
-    } finally {
-        source.cancel();
+const resetPasswordFetch = async (
+  data: ResetPasswordAuth
+): Promise<ServiceFetchResponse> => {
+  const source: CancelTokenSource = axios.CancelToken.source();
+  try {
+    const response: AxiosResponse = await axios.post(
+      `${siteURL}/users/reset_password_confirm/`,
+      data,
+      {
+        cancelToken: source.token,
+      }
+    );
+    if (response.status === 204) {
+      return {
+        ...responseServiceState,
+        HTTPstatus: response.status,
+      };
+    } else {
+      return {
+        ...responseServiceState,
+        HTTPstatus: response?.status,
+        isSuccess: false,
+        errors: response?.data,
+      };
     }
+  } catch (e: any) {
+    if (e.code === "ERR_NETWORK") return returnNetworkError;
+    return {
+      ...responseServiceState,
+      HTTPstatus: e?.response?.status,
+      isSuccess: false,
+      errors: e?.response?.data,
+    };
+  } finally {
+    source.cancel();
+  }
 };
 
-export default resetPasswordFetch
+export default resetPasswordFetch;

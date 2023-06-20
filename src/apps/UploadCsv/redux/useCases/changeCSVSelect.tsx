@@ -1,4 +1,4 @@
-import { NameModels } from '../../model'
+import { NameModels } from '../../uploadcsv.model'
 import { uploadCSVReducer } from '../UploadcsvSlice'
 
 const changeCSVSelect = (nameModel: NameModels, dispatch: any) => {

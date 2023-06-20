@@ -1,5 +1,5 @@
+import { ResetPasswordAuth } from "@/src/apps/Auth/auth.models";
 import useResetPassword from "@/src/apps/Auth/hooks/useResetPassword";
-import { ResetPasswordAuth } from "@/src/apps/Auth/models";
 import LoaderSpinner from "@/src/apps/Common/components/LoaderSpinner";
 
 import Link from "next/link";
@@ -23,9 +23,7 @@ const ResetPassword = ({ uid, token }: Props) => {
     
     setResetPasswordForm({ ...resetPasswordForm, uid, token: token.toString() })
   }, [uid, token])
-  useEffect(() => {
-    
-  }, []);
+  
   return (
     <div className="flex items-center justify-center h-screen">
       {/* Login Container */}

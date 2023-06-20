@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { LoginStateType } from "../models/login.model";
+import { LoginStateType } from "../login.model";
 import { getTokensFromLocalStorage } from "../services/token-service";
 const { tokens } = getTokensFromLocalStorage();
 export const LoginState: LoginStateType = {
@@ -27,9 +27,11 @@ const LoginSlice = createSlice({
     verifyTokenReducer: createReducer,
     signInReducer: createReducer,
     refreshTokenReducer: createReducer,
+    destroyTokenReducer: createReducer,
   },
 });
 
-export const { verifyTokenReducer, signInReducer } = LoginSlice.actions;
+export const { verifyTokenReducer, destroyTokenReducer, signInReducer } =
+  LoginSlice.actions;
 
 export default LoginSlice.reducer;

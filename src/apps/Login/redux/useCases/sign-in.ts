@@ -1,6 +1,6 @@
 import { showNoti } from "@/src/apps/Common/redux/NotificationSlice";
 import { Dispatch } from "redux";
-import { UserAuth } from "../../models/login.model";
+import { UserAuth } from "../../login.model";
 import fetchCreateToken from "../../services/create-token";
 import { saveTokensToLocalStorage } from "../../services/token-service";
 import { verifyTokenReducer } from "../LoginSlice";
@@ -14,10 +14,15 @@ export const signIn = async (
       isLoading: true,
     })
   );
-  const { errors, status, isAuthenticated, data, networkerror } =
-    await fetchCreateToken(userAuth);
+  const { errors, isSuccess, data, networkError } = await fetchCreateToken(
+    userAuth
+  );
 
-  if (isAuthenticated) {
+  if (isSuccess) {
+    saveTokensToLocalStorage({
+      accessToken: data?.access,
+      refreshToken: data?.refresh,
+    });
     dispatch(
       showNoti({
         type: "success",
@@ -27,19 +32,16 @@ export const signIn = async (
     );
     dispatch(
       verifyTokenReducer({
-        accessToken: data?.accessToken,
-        refreshToken: data?.refreshToken,
+        accessToken: data?.access,
+        refreshToken: data?.refresh,
         isAuthenticated: true,
         isLoading: false,
       })
     );
-    saveTokensToLocalStorage({
-      accessToken: data?.accessToken,
-      refreshToken: data?.refreshToken,
-    });
+
     return true;
   } else {
-    if (networkerror) {
+    if (networkError) {
       dispatch(
         showNoti({
           type: "error",

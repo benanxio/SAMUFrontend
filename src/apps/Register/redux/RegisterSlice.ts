@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { RegisterStateType } from "../models/register.models";
+import { RegisterStateType } from "../register.models";
 
 export const RegisterState: RegisterStateType = {
   errors: {

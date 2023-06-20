@@ -1,6 +1,6 @@
 import { RootState } from '@/src/redux/store'
 import { useDispatch, useSelector } from 'react-redux'
-import { ResetPasswordAuth } from '../models'
+import { ResetPasswordAuth } from '../auth.models'
 import resetPassword from '../redux/useCases/reset-password'
 
 const useResetPassword = () => {

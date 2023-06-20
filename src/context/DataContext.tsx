@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import useGetModels from "../apps/UploadCsv/hooks/useGetModels";
-import { ListModels } from "../apps/UploadCsv/model";
+import { ListModels } from "../apps/UploadCsv/uploadcsv.model";
 
 interface ValuesDataContext {
   listModels?: ListModels[];

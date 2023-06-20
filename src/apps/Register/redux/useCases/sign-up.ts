@@ -1,5 +1,5 @@
 import { showNoti } from "@/src/apps/Common/redux/NotificationSlice";
-import { UserRegisterData } from "../../models/register.models";
+import { UserRegisterData } from "../../register.models";
 import { registerFetch } from "../../services/register-fetch";
 import { signupReducer } from "../RegisterSlice";
 
@@ -10,14 +10,14 @@ export default async function signUp(user: UserRegisterData, dispatch: any) {
     })
   );
   try {
-    const { isCreated, errors } = await registerFetch(user);
+    const { isSuccess, errors } = await registerFetch(user);
 
-    if (isCreated) {
+    if (isSuccess) {
       dispatch(
         signupReducer({
           isLoading: false,
           isSendEmail: true,
-          isActivateEmail:true,
+          isActivateEmail: true,
           errors: {},
         })
       );
@@ -36,8 +36,7 @@ export default async function signUp(user: UserRegisterData, dispatch: any) {
           isLoading: false,
           isSendEmail: false,
           errors: errors,
-          isActivateEmail:false,
-          
+          isActivateEmail: false,
         })
       );
 
@@ -47,7 +46,7 @@ export default async function signUp(user: UserRegisterData, dispatch: any) {
     dispatch(
       signupReducer({
         isLoading: false,
-        isActivateEmail:false,
+        isActivateEmail: false,
       })
     );
 

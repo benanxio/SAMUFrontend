@@ -1,20 +1,18 @@
 import { siteURL } from "@/src/lib/envs";
+import {
+  ServiceFetchResponse,
+  responseServiceState,
+  returnNetworkError,
+} from "@/src/lib/error-https-services";
 import axios, { AxiosResponse, CancelTokenSource } from "axios";
-import { NameModels } from "../model";
-
-interface PostResponse {
-  errors: any;
-  data: any;
-  status: number;
-  isSucess: boolean;
-}
+import { NameModels } from "../uploadcsv.model";
 
 const fetchUploadCSV = async (
   file: File,
   nameModel: NameModels,
   encode: string,
   delimiter: string
-): Promise<PostResponse> => {
+): Promise<ServiceFetchResponse> => {
   const source: CancelTokenSource = axios.CancelToken.source();
   try {
     const formData = new FormData();
@@ -28,30 +26,19 @@ const fetchUploadCSV = async (
         cancelToken: source.token,
       }
     );
+
     return {
-      errors: {},
-      data: response.data,
-      status: response.status,
-      isSucess: true,
+      ...responseServiceState,
+      data: response?.data,
+      HTTPstatus: response.status,
     };
   } catch (e: any) {
-    console.log(e);
-    if (e.code === "ERR_NETWORK") {
-      return {
-        errors: {
-          error_type: "Error de red",
-          message: "Servidor no disponible por ahora.",
-        },
-        data: [],
-        status: e.response?.status,
-        isSucess: false,
-      };
-    }
+    if (e.code === "ERR_NETWORK") return returnNetworkError;
     return {
+      ...responseServiceState,
       errors: e.response?.data,
-      data: [],
-      status: e.response?.status,
-      isSucess: false,
+      HTTPstatus: e.response?.status,
+      isSuccess: false,
     };
   } finally {
     source.cancel();

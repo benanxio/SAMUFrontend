@@ -1,7 +1,14 @@
 import { siteURL } from "@/src/lib/envs";
-import axios, { AxiosError, AxiosResponse, CancelTokenSource } from "axios";
+import {
+  ServiceFetchResponse,
+  responseServiceState,
+  returnNetworkError,
+} from "@/src/lib/error-https-services";
+import axios, { AxiosResponse, CancelTokenSource } from "axios";
 
-const fetchVerifyToken = async (accessToken: string): Promise<boolean> => {
+const fetchVerifyToken = async (
+  accessToken: string
+): Promise<ServiceFetchResponse> => {
   const source: CancelTokenSource = axios.CancelToken.source();
 
   try {
@@ -14,15 +21,27 @@ const fetchVerifyToken = async (accessToken: string): Promise<boolean> => {
         cancelToken: source.token,
       }
     );
-
-    return response.status === 200;
-  } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response?.status === 400) {
-      return false;
+    if (response.status == 200) {
+      return {
+        ...responseServiceState,
+        HTTPstatus: response.status,
+      };
     } else {
-      return false;
+      return {
+        ...responseServiceState,
+        errors: response?.data,
+        isSuccess: false,
+        HTTPstatus: response.status,
+      };
     }
+  } catch (e: any) {
+    if (e.code === "ERR_NETWORK") return returnNetworkError;
+    return {
+      ...responseServiceState,
+      HTTPstatus: e?.response?.status,
+      errors: e?.response?.data,
+      isSuccess: false,
+    };
   } finally {
     source.cancel();
   }

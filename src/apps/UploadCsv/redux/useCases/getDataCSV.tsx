@@ -1,5 +1,5 @@
-import { NameModels } from "../../model";
 import fetchGetModelData from "../../services/fetch-get-model-data";
+import { NameModels } from "../../uploadcsv.model";
 import { uploadCSVReducer } from "../UploadcsvSlice";
 
 const getDataCSV = async (nameModel: NameModels, dispatch: any) => {

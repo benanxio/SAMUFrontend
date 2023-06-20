@@ -11,11 +11,9 @@ export const verifyToken = async (dispatch: Dispatch<any>) => {
   );
   const { tokens } = getTokensFromLocalStorage();
 
-  const isAuthenticated: boolean = await fetchVerifyToken(
-    tokens?.accessToken || ""
-  );
+  const { isSuccess } = await fetchVerifyToken(tokens?.accessToken || "");
 
-  if (isAuthenticated) {
+  if (isSuccess) {
     dispatch(
       verifyTokenReducer({
         isAuthenticated: true,

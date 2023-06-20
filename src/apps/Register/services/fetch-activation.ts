@@ -1,13 +1,18 @@
 import { siteURL } from "@/src/lib/envs";
-import axios, { AxiosError, CancelTokenSource } from "axios";
-import { DataActivation, DataResponseFetch } from "../models/register.models";
+import {
+  ServiceFetchResponse,
+  responseServiceState,
+  returnNetworkError,
+} from "@/src/lib/error-https-services";
+import axios, { AxiosResponse, CancelTokenSource } from "axios";
+import { DataActivation } from "../register.models";
 
 const fetchActivation = async (
   data: DataActivation
-): Promise<DataResponseFetch> => {
+): Promise<ServiceFetchResponse> => {
   const source: CancelTokenSource = axios.CancelToken.source();
   try {
-    const response = await axios.post(
+    const response: AxiosResponse = await axios.post(
       `${siteURL}/auth/users/activation/`,
       data,
       {
@@ -16,42 +21,24 @@ const fetchActivation = async (
     );
     if (response.status === 204) {
       return {
-        state: 204,
-        isSuccess: true,
-        errors: {},
+        ...responseServiceState,
+        HTTPstatus: response.status,
       };
     } else {
       return {
-        state: 400,
+        ...responseServiceState,
+        HTTPstatus: response.status,
         isSuccess: false,
-        errors: response.data,
+        errors: response?.data,
       };
     }
-  } catch (error: any) {
-    const axiosError: any = error as AxiosError;
-    if (axiosError.response?.status === 400) {
-      console.log(error.response.data);
-
-      return {
-        state: 400,
-        isSuccess: false,
-        errors: error.response.data,
-      };
-    } else if (axiosError.response?.status === 403) {
-      console.log(error.response.data);
-
-      return {
-        state: 403,
-        isSuccess: false,
-        errors: error.response.data,
-      };
-    } else {
-      return {
-        state: 500,
-        isSuccess: false,
-        errors: error.response.data,
-      };
-    }
+  } catch (e: any) {
+    if (e.code === "ERR_NETWORK") return returnNetworkError;
+    return {
+      ...responseServiceState,
+      errors: e?.response?.data,
+      isSuccess: false,
+    };
   } finally {
     source.cancel();
   }

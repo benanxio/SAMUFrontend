@@ -1,6 +1,11 @@
 import { siteURL } from "@/src/lib/envs";
-import axios, { AxiosError, AxiosResponse, CancelTokenSource } from "axios";
-import { LoginErrors, Tokens, UserAuth } from "../models/login.model";
+import {
+  ServiceFetchResponse,
+  responseServiceState,
+  returnNetworkError,
+} from "@/src/lib/error-https-services";
+import axios, { AxiosResponse, CancelTokenSource } from "axios";
+import { LoginErrors, Tokens, UserAuth } from "../login.model";
 import { TokenPair } from "./token-service";
 interface Response {
   errors?: LoginErrors;
@@ -12,7 +17,9 @@ interface Response {
 
 interface PostResponse extends Tokens {}
 
-const fetchCreateToken = async (userAuth: UserAuth): Promise<Response> => {
+const fetchCreateToken = async (
+  userAuth: UserAuth
+): Promise<ServiceFetchResponse> => {
   const source: CancelTokenSource = axios.CancelToken.source();
 
   try {
@@ -20,30 +27,27 @@ const fetchCreateToken = async (userAuth: UserAuth): Promise<Response> => {
       `${siteURL}/auth/jwt/create/`,
       userAuth
     );
-
-    return {
-      errors: {},
-      status: response.status,
-      isAuthenticated: response.status === 200,
-      data: {
-        accessToken: response.data.access,
-        refreshToken: response.data.refresh,
-      },
-    };
-  } catch (error: any) {
-    console.log(error)
-    if (error.code === "ERR_NETWORK") {
+    if (response.status === 200) {
       return {
-        errors: {},
-        networkerror: true,
+        ...responseServiceState,
+        HTTPstatus: response.status,
+        data: response?.data,
+      };
+    } else {
+      return {
+        ...responseServiceState,
+        HTTPstatus: response.status,
+        isSuccess: false,
+        errors: response?.data,
       };
     }
-
-    const axiosError = error as AxiosError;
+  } catch (e: any) {
+    if (e.code === "ERR_NETWORK") return returnNetworkError;
     return {
-      errors: error.response?.data,
-      status: axiosError.response?.status,
-      isAuthenticated: false,
+      ...responseServiceState,
+      errors: e.response?.data,
+      HTTPstatus: e?.response?.status,
+      isSuccess: false,
     };
   } finally {
     source.cancel();

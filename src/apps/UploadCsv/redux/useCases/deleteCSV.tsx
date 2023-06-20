@@ -1,6 +1,6 @@
 import { showNoti } from "@/src/apps/Common/redux/NotificationSlice";
-import { NameModels } from "../../model";
 import fetchDeleteCsvdb from "../../services/fetch-delete-csvdb";
+import { NameModels } from "../../uploadcsv.model";
 import { uploadCSVReducer } from "../UploadcsvSlice";
 import getModels from "./getModels";
 
@@ -11,9 +11,9 @@ const deleteCSV = async (nameModel: NameModels, dispatch: any) => {
     })
   );
 
-  const { errors, isDeleting, status } = await fetchDeleteCsvdb(nameModel);
+  const { errors, isSuccess, HTTPstatus } = await fetchDeleteCsvdb(nameModel);
 
-  if (isDeleting) {
+  if (isSuccess) {
     dispatch(
       uploadCSVReducer({
         isLoading: false,

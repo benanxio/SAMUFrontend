@@ -31,9 +31,15 @@ const Activate = ({ uid, token }: Props) => {
           {!isLoadingActivate && <span>Activar Cuenta</span>}
         </button>
         <span className="text-sm text-red-500">{errors?.detail}</span>
-        <div className="mt-5 flex justify-between text-sm text-gray-600"></div>
-        <div className="flex justify-center mt-5 text-sm"></div>
 
+        <div className="mt-2 flex justify-between text-sm text-gray-600">
+          <Link href="/login" className="underline">
+            Iniciar Session
+          </Link>
+          <Link href="/register" className="underline">
+            Registrarse
+          </Link>
+        </div>
         <div className="mt-5 flex text-center text-xs text-gray-400">
           <p>
             Esta cuenta necesitara ser habiltada para poder <br />

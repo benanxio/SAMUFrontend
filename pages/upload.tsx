@@ -3,7 +3,7 @@ import Layout from "@/src/apps/Layouts/Layout";
 import InfoResponse from "@/src/apps/UploadCsv/components/InfoResponse";
 import OptionsCircle from "@/src/apps/UploadCsv/components/OptionsCricle";
 import useGetModels from "@/src/apps/UploadCsv/hooks/useGetModels";
-import { ListModels } from "@/src/apps/UploadCsv/model";
+import { ListModels } from "@/src/apps/UploadCsv/uploadcsv.model";
 import { RootState } from "@/src/redux/store";
 import { Skeleton } from "primereact/skeleton";
 import { Tree } from "primereact/tree";

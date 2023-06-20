@@ -1,36 +1,39 @@
 import LoaderSpinner from "@/src/apps/Common/components/LoaderSpinner";
-import useLogin from "@/src/apps/Login/hooks/useLogin";
 import { verifyToken } from "@/src/apps/Login/redux/useCases/verify-token";
 import useRegister from "@/src/apps/Register/hooks/useRegister";
-import { UserAuthRegister } from "@/src/apps/Register/models/register.models";
+import { UserAuthRegister } from "@/src/apps/Register/register.models";
+import { RootState } from "@/src/redux/store";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { InputText } from "primereact/inputtext";
+import { Password } from "primereact/password";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Register = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
   const [registerForm, setRegisterForm] = useState<UserAuthRegister>({
     email: "",
     nickname: "",
     password: "",
     re_password: "",
   });
+  const router = useRouter();
   const { signNupWithEmail, errors, signupLoading, isSendEmail } =
     useRegister();
-  const { isAuthenticated } = useLogin();
-
+  const { isAuthenticated } = useSelector((state: RootState) => state.Login);
   useEffect(() => {
     const f = async () => {
-      await verifyToken(dispatch);
+      let isS = await verifyToken(dispatch);
+      if (isS) {
+        router.push("/");
+      }
     };
     f();
   }, []);
 
   return (
     <div className="flex items-center justify-center h-screen">
-      {/* Login Container */}
       <div className="min-w-fit flex-col border bg-white px-6 py-14 shadow-md rounded-[8px] ">
         <div className="mb-5 flex justify-center">
           <img
@@ -41,58 +44,77 @@ const Register = () => {
         </div>
         <div className="flex flex-col text-sm rounded-md">
           <div className="flex flex-col text-sm rounded-md">
-            <input
+            <InputText
               onChange={(e) => {
                 setRegisterForm({
                   ...registerForm,
                   nickname: e.target.value,
                 });
               }}
-              className="mb-1 rounded-[5px] border p-3 hover:outline-none focus:outline-none hover:border-yellow-500 "
+              id="username"
+              value={registerForm.nickname}
               type="text"
+              aria-describedby="usename-help"
               placeholder="Nombre de usuario"
+              className="mt-2 w-full"
             />
-            <span className="text-xs" style={{ color: "red" }}>
+            <span
+              className="text-xs"
+              style={{ color: "red", maxWidth: "250px" }}
+            >
               {errors?.nickname}
             </span>
-            <input
+            <InputText
+              className="mt-2 w-full"
               onChange={(e) => {
                 setRegisterForm({
                   ...registerForm,
                   email: e.target.value,
                 });
               }}
-              className="mb-1  rounded-[5px] border p-3 hover:outline-none focus:outline-none hover:border-yellow-500 "
+              id="email"
+              value={registerForm.email}
               type="email"
-              placeholder="Correo Electronico"
+              aria-describedby="email-help"
+              placeholder="Correo electronico"
             />
-            <span className="text-xs" style={{ color: "red" }}>
+            <span
+              className="text-xs "
+              style={{ color: "red", maxWidth: "250px" }}
+            >
               {errors?.email}
             </span>{" "}
-            <input
+            <Password
+              placeholder="Ingrese su contraseña"
+              value={registerForm.password}
               onChange={(e) => {
                 setRegisterForm({
                   ...registerForm,
                   password: e.target.value,
                 });
               }}
-              className="mb-1 border rounded-[5px] p-3 hover:outline-none focus:outline-none hover:border-yellow-500"
-              type="password"
-              placeholder="Ingrese su contraseña"
+              toggleMask
+              feedback={false}
+              className="mt-2 w-full"
             />
-            <span className="text-xs" style={{ color: "red" }}>
+            <span
+              className="text-xs"
+              style={{ color: "red", maxWidth: "250px" }}
+            >
               {errors?.password}
             </span>
-            <input
+            <Password
+              placeholder="Re-ingrese su contraseña"
+              value={registerForm.re_password}
               onChange={(e) => {
                 setRegisterForm({
                   ...registerForm,
                   re_password: e.target.value,
                 });
               }}
-              className="mb-5 border rounded-[5px] p-3 hover:outline-none focus:outline-none hover:border-yellow-500"
-              type="password"
-              placeholder="Re-ingrese su contraseña"
+              toggleMask
+              feedback={false}
+              className="mt-2 w-full"
             />
             <span
               className="text-xs"
@@ -121,7 +143,7 @@ const Register = () => {
           </div>
         </div>
         <button
-          className="flex justify-center items-center  mt-5 w-full border p-2 bg-gradient-to-r from-red-800 via-red-500 to-red-300 text-white rounded-[4px] hover:bg-red-400 transition-colors duration-300"
+          className="flex justify-center items-center  mt-3 w-full border p-2 bg-gradient-to-r from-red-800 via-red-500 to-red-300 text-white rounded-[4px] hover:bg-red-400 transition-colors duration-300"
           type="submit"
           onClick={() => {
             signNupWithEmail(registerForm);
@@ -131,12 +153,11 @@ const Register = () => {
           {!signupLoading && <span className="p-1">Registrarse</span>}
         </button>
 
-        <div className=" mt-5 flex justify-between text-sm text-gray-600">
+        <div className=" mt-2 flex justify-between text-sm text-gray-600">
           <Link href="/login" className="underline">
             Ya tienes una cuenta activada?
           </Link>
         </div>
-        <div className="flex justify-center mt-5 text-sm"></div>
 
         <div className="mt-5 flex text-center text-xs text-gray-400">
           <p>

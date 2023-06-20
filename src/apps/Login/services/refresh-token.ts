@@ -1,8 +1,13 @@
 import { siteURL } from "@/src/lib/envs";
+import {
+  ServiceFetchResponse,
+  responseServiceState,
+  returnNetworkError,
+} from "@/src/lib/error-https-services";
 import axios, { AxiosResponse, CancelTokenSource } from "axios";
 import { getTokensFromLocalStorage } from "./token-service";
 
-const fetchRefreshToken = async () => {
+const fetchRefreshToken = async (): Promise<ServiceFetchResponse> => {
   const source: CancelTokenSource = axios.CancelToken.source();
   const { tokens } = getTokensFromLocalStorage();
   try {
@@ -17,13 +22,16 @@ const fetchRefreshToken = async () => {
     );
 
     return {
-      isSuccess: true,
-      status: response.status,
+      ...responseServiceState,
+      HTTPstatus: response.status,
     };
-  } catch (error) {
+  } catch (e: any) {
+    if (e.code === "ERR_NETWORK") return returnNetworkError;
     return {
+      ...responseServiceState,
       isSuccess: false,
-      status: 401,
+      HTTPstatus: e?.response?.status,
+      errors: e?.response?.data,
     };
   } finally {
     source.cancel();

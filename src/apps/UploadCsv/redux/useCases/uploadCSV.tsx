@@ -1,6 +1,6 @@
 import { showNoti } from "@/src/apps/Common/redux/NotificationSlice";
-import { NameModels } from "../../model";
 import fetchUploadCSV from "../../services/fetch-upload-csvdb";
+import { NameModels } from "../../uploadcsv.model";
 import { uploadCSVReducer } from "../UploadcsvSlice";
 import getModels from "./getModels";
 
@@ -17,14 +17,13 @@ const uploadCSV = async (
     })
   );
 
-  const { errors, data, status, isSucess } = await fetchUploadCSV(
+  const { errors, data, HTTPstatus, isSuccess } = await fetchUploadCSV(
     fileCSV,
     nameModel,
     encode,
     delimiter
   );
-  console.log(data);
-  if (isSucess) {
+  if (isSuccess) {
     dispatch(
       uploadCSVReducer({
         isLoading: false,

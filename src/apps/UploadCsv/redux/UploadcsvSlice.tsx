@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UploadcsvStateType } from "../model";
+import { UploadcsvStateType } from "../uploadcsv.model";
 
 export const UploadcsvState: UploadcsvStateType = {
   isLoading: false,

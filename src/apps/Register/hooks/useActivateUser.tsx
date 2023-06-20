@@ -1,22 +1,24 @@
 import { RootState } from "@/src/redux/store";
-import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { DataActivation } from "../models/register.models";
 import activateUser from "../redux/useCases/activate-user";
+import { DataActivation } from "../register.models";
 
 const useActivateUser = () => {
-  
   const dispatch = useDispatch();
   const { isLoading, errors, isActivateEmail } = useSelector(
     (state: RootState) => state.Register
   );
+  const router = useRouter();
   const activateUserWithEmail = async (data: DataActivation) => {
-    await activateUser(data, dispatch);
+    let is = await activateUser(data, dispatch);
+    if (is) {
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+    }
   };
 
-  useEffect(() => {
-    window.location.href = "/login";
-  }, [isActivateEmail]);
   return {
     activateUserWithEmail,
     isLoadingActivate: isLoading,

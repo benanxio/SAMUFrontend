@@ -1,46 +1,34 @@
 import { siteURL } from "@/src/lib/envs";
-import axios, { CancelTokenSource } from "axios";
-import { NameModels } from "../model";
-interface DataGetSuccess {
-  count?: number;
-  next?: null;
-  previous?: null;
-  results?: any[];
-}
-interface GetResponse {
-  errors?: any;
-  isSuccess?: boolean;
-  status?: number;
-  data?: DataGetSuccess;
-}
+import {
+  ServiceFetchResponse,
+  responseServiceState,
+  returnNetworkError,
+} from "@/src/lib/error-https-services";
+import axios, { AxiosResponse, CancelTokenSource } from "axios";
+import { NameModels } from "../uploadcsv.model";
 const fetchGetModelData = async (
   nameModel: NameModels
-): Promise<GetResponse> => {
+): Promise<ServiceFetchResponse> => {
   const source: CancelTokenSource = axios.CancelToken.source();
 
   try {
-    const response = await axios.get(
+    const response: AxiosResponse = await axios.get(
       `${siteURL}/api/get-all-${nameModel}`,
       { cancelToken: source.token }
     );
 
     return {
-      isSuccess: true,
-      status: response.status,
-      data: response.data,
-      errors: {},
+      ...responseServiceState,
+      HTTPstatus: response.status,
+      data: response?.data,
     };
   } catch (e: any) {
+    if (e.code === "ERR_NETWORK") return returnNetworkError;
     return {
+      ...responseServiceState,
       isSuccess: false,
-      status: 0,
-      errors: e.response.data,
-      data: {
-        count: 0,
-        next: null,
-        previous: null,
-        results: [],
-      },
+      HTTPstatus: e?.response?.status,
+      errors: e?.response?.data,
     };
   }
 };

@@ -1,8 +1,9 @@
 import { RootState } from "@/src/redux/store";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { UserAuth } from "../models/login.model";
+import { UserAuth } from "../login.model";
 import { verifyTokenReducer } from "../redux/LoginSlice";
+import { logOut } from "../redux/useCases/log-out";
 import { signIn } from "../redux/useCases/sign-in";
 const useLogin = () => {
   const router = useRouter();
@@ -16,7 +17,10 @@ const useLogin = () => {
       router.push("/");
     }
   };
-
+  const logOutApp = async () => {
+    await logOut(dispatch);
+    router.push("/login")
+  };
   const clearErrors = () => {
     dispatch(
       verifyTokenReducer({
@@ -30,6 +34,7 @@ const useLogin = () => {
     clearErrors,
     loginErrors: errors,
     isAuthenticated,
+    logOutApp,
   };
 };
 

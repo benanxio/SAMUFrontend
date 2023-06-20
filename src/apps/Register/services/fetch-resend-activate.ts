@@ -1,11 +1,18 @@
 import { siteURL } from "@/src/lib/envs";
-import axios, { AxiosError, CancelTokenSource } from "axios";
-import { DataResendActivation } from "../models/register.models";
+import {
+  ServiceFetchResponse,
+  responseServiceState,
+  returnNetworkError,
+} from "@/src/lib/error-https-services";
+import axios, { AxiosResponse, CancelTokenSource } from "axios";
+import { DataResendActivation } from "../register.models";
 
-const fetchResendActivate = async (data: DataResendActivation) => {
+const fetchResendActivate = async (
+  data: DataResendActivation
+): Promise<ServiceFetchResponse> => {
   const source: CancelTokenSource = axios.CancelToken.source();
   try {
-    const response = await axios.post(
+    const response: AxiosResponse = await axios.post(
       `${siteURL}/auth/users/resend_activation/`,
       data,
       {
@@ -14,19 +21,22 @@ const fetchResendActivate = async (data: DataResendActivation) => {
     );
     if (response.status === 204) {
       return {
-        errors: {},
-        isSuccess: false,
+        ...responseServiceState,
+        HTTPstatus: response.status,
       };
     } else {
       return {
-        errors: response.data,
+        ...responseServiceState,
+        HTTPstatus: response.status,
+        errors: response?.data,
         isSuccess: false,
       };
     }
-  } catch (error: any) {
-    const axiosError: any = error as AxiosError;
+  } catch (e: any) {
+    if (e.code === "ERR_NETWORK") return returnNetworkError;
     return {
-      errors: error.data.response,
+      ...responseServiceState,
+      errors: e?.data?.response,
       isSuccess: false,
     };
   } finally {
