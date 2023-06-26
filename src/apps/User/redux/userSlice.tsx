@@ -9,8 +9,9 @@ export const UserState: UserProfile = {
   date_joined: "",
   is_active_from_admin: false,
   isLoading: false,
-    errors: [],
-    networkError :false
+  errors: [],
+  networkError: false,
+  get_short_name: "",
 };
 
 const createReducer = (

@@ -18,9 +18,10 @@ export const getUser = async (dispatch: Dispatch<any>) => {
         first_name: data.first_name,
         last_name: data.last_name,
         date_joined: data.date_joined,
+        get_short_name: data.get_short_name,
       })
     );
-
+    
     return true;
   } else {
     dispatch(

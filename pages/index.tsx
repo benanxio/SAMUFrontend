@@ -1,28 +1,29 @@
 import Layout from "@/src/apps/Layouts/Layout";
+import useUser from "@/src/apps/Reports/hooks/useUser";
 import { useState } from "react";
 
 const Home = () => {
-
+  const { user } = useUser()
   const [displayWelcome, setDisplayWelcome] = useState(false);
   return (
     <Layout screenLoader={false}>
       <div className="mt-5">
         <div
-          className={`bg-orange-200 mb-10 p-6 rounded-lg shadow relative ${
+          className={`bg-red-100 mb-10 p-6 rounded-lg shadow relative ${
             displayWelcome ? "hidden" : " "
           }`}
         >
-          <div className="cursor-pointer absolute p-4 right-0 top-0">
+          <div className="cursor-pointer absolute p-3 right-0 top-0">
             <i
               className="pi pi-times"
-              style={{ fontSize: "2rem",color:"gray" }}
+              style={{ fontSize: "1rem",color:"gray" }}
               onClick={() => setDisplayWelcome(true)}
             ></i>
           </div>
           <div className="md:flex ">
             <div className="md:w-1/2">
               <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-2 leading-tight">
-                Bienvenido a sistema de reportes GONZALO AXEL VALDEZ QUISPE
+                Bienvenido a sistema de reportes  { user.first_name?.toUpperCase()} {" "} {user.last_name?.toUpperCase()}
               </h2>
               <p className="text-gray-700 mb-4">
                 Sistema de reportes para mostrar los margenes de error de los

@@ -40,7 +40,7 @@ const Login = () => {
           />
         </div>
         <div className="flex flex-col text-sm rounded-md">
-          <div className="mb-2" style={{ maxWidth: "235px" }}>
+          <div className="mb-2">
             <InputText
               className="w-full"
               onChange={(e) => {
@@ -56,24 +56,24 @@ const Login = () => {
               placeholder="Email"
             />
           </div>
-          <small id="email-help" style={{ color: "red", maxWidth: "234px" }}>
+          <small id="email-help" style={{ color: "red" }}>
             {loginErrors?.email}
           </small>
-          <div className="w-full">
-            <Password
-              placeholder="Password"
-              value={loginForm.password}
-              onChange={(e) => {
-                clearErrors();
-                setLoginForm({
-                  ...loginForm,
-                  password: e.target.value,
-                });
-              }}
-              toggleMask
-              feedback={false}
-            />
-          </div>
+
+          <Password
+            placeholder="Password"
+            value={loginForm.password}
+            onChange={(e) => {
+              clearErrors();
+              setLoginForm({
+                ...loginForm,
+                password: e.target.value,
+              });
+            }}
+            toggleMask
+            feedback={false}
+          />
+
           <small id="pass-help" style={{ color: "red", maxWidth: "240px" }}>
             {loginErrors?.detail}
             {loginErrors?.password}
@@ -81,7 +81,7 @@ const Login = () => {
         </div>
         <button
           onClick={() => loginWithEmail(loginForm)}
-          style={{ maxWidth: "235px" }}
+          
           className="flex justify-center items-center mt-3 w-full border p-1 bg-gradient-to-r from-red-800 via-red-500 to-red-300 text-white rounded-[4px] hover:bg-red-400 transition-colors duration-300"
           type="submit"
         >

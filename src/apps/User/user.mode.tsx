@@ -7,5 +7,6 @@ export interface UserProfile {
   is_active_from_admin?: boolean;
   isLoading?: boolean;
   errors?: any;
+  get_short_name?: string;
   networkError?: boolean;
 }

@@ -25,13 +25,11 @@ const Layout = ({ screenLoader = true, children, ...props }: any) => {
       setLoading(false);
       if (!isS) {
         router.push("/login");
-      } else {
-        loadUser();
       }
     };
 
     fetch();
-  }, [router]);
+  }, []);
 
   if (screenLoader) return <LoadingScreen />;
   const styleSelected = "text-cyan-600 border-left-2 border-cyan-600";

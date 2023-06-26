@@ -10,23 +10,22 @@ import "primeicons/primeicons.css";
 import PrimeReact from "primereact/api";
 import "primereact/resources/primereact.min.css";
 import "react-toastify/dist/ReactToastify.css";
-  
 
+import "primereact/resources/themes/tailwind-light/theme.css";
 PrimeReact.ripple = true;
-
 
 import { Provider } from "react-redux";
 export default function App({ Component, pageProps, router }: AppProps) {
   return (
     <Provider store={store}>
       <DataProvider>
-        <UIProvider>
-          <AuthProvider>
+        <AuthProvider>
+          <UIProvider>
             <Notification />
 
             <Component {...pageProps} key={router.route} />
-          </AuthProvider>
-        </UIProvider>
+          </UIProvider>
+        </AuthProvider>
       </DataProvider>
     </Provider>
   );

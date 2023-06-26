@@ -11,6 +11,7 @@ const useUser = () => {
     last_name,
     date_joined,
     is_active_from_admin,
+    get_short_name,
     isLoading,
   } = useSelector((state: RootState) => state.User);
 
@@ -25,6 +26,7 @@ const useUser = () => {
       nickname,
       first_name,
       last_name,
+      get_short_name,
       date_joined,
       is_active_from_admin,
     },
