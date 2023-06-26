@@ -1,4 +1,4 @@
-interface UserProfile {
+export interface UserProfile {
   email?: string;
   nickname?: string;
   first_name?: string;

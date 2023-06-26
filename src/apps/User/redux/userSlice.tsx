@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { UserProfile } from "../user.mode";
 
 export const UserState: UserProfile = {
   email: "",
