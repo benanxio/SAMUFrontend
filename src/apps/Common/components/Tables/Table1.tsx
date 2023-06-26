@@ -380,10 +380,6 @@ export default function Table1() {
     });
   };
 
-  const handleBalanceToggle = (e) => {
-    setBalanceFrozen(e.value);
-  };
-
   return (
     <div style={{ width: "80vw", margin: "0" }}>
       <DataTable
