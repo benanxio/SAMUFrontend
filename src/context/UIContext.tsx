@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { siteURL } from "../lib/envs";
 import { themeOptions } from "./data-themes";
 
 interface Indetifier {
@@ -11,7 +12,7 @@ const UIProvider = ({ children }: any) => {
   const [selectedTheme, setSelectedTheme] = useState(themeOptions[0].value);
   function changeTheme(newTheme: any) {
     const linkElement = document.getElementById("theme-link");
-    const themeCssPath = `http://localhost:3000/primereact/resources/themes/${newTheme}/theme.css`;
+    const themeCssPath = `${siteURL}/primereact/resources/themes/${newTheme}/theme.css`;
 
     if (linkElement) {
       linkElement.setAttribute("href", themeCssPath);
