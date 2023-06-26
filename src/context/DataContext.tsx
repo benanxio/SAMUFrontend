@@ -4,16 +4,17 @@ import { ListModels } from "../apps/UploadCsv/uploadcsv.model";
 
 interface ValuesDataContext {
   listModels?: ListModels[];
-  loadingModels?: boolean;
+  isLoadingModals?: boolean;
 }
 
 export const DataContext = createContext({} as ValuesDataContext);
+
 const DataProvider = ({ children }: any) => {
-  const { listModels, loadingModels } = useGetModels();
+  const { listModels, isLoadingModals } = useGetModels();
 
   const values = {
     listModels,
-    loadingModels,
+    isLoadingModals,
   };
   return <DataContext.Provider value={values}>{children}</DataContext.Provider>;
 };

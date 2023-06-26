@@ -8,10 +8,9 @@ export interface UploadcsvStateType {
   file?: File | null;
   encode?: "utf-8" | "latin1";
   delimiter?: "," | ";";
-  networkerror?:boolean
+  networkerror?: boolean;
+  isLoadingModals?: boolean;
 }
-
-
 
 export interface ListModels {
   nombre_modelo: string;

@@ -2,22 +2,22 @@ import MessageNetWorkError from "@/src/apps/Common/components/MessageNetWorkErro
 import Layout from "@/src/apps/Layouts/Layout";
 import InfoResponse from "@/src/apps/UploadCsv/components/InfoResponse";
 import OptionsCircle from "@/src/apps/UploadCsv/components/OptionsCricle";
-import useGetModels from "@/src/apps/UploadCsv/hooks/useGetModels";
 import { ListModels } from "@/src/apps/UploadCsv/uploadcsv.model";
+import { DataContext } from "@/src/context/DataContext";
 import { RootState } from "@/src/redux/store";
 import { Skeleton } from "primereact/skeleton";
 import { Tree } from "primereact/tree";
+import { useContext } from "react";
 import { useSelector } from "react-redux";
 
 const Uppload = () => {
-  const { listModels, loadingModels } = useGetModels();
+  const { listModels, isLoadingModals } = useContext(DataContext);
   const { networkerror } = useSelector((state: RootState) => state.Upload);
-
   return (
-    <Layout>
-      <div className="surface-ground">
+    <Layout screenLoader={false}>
+      <div>
         {networkerror && <MessageNetWorkError />}
-        <div className={`grid  ${loadingModels && "hidden"}`}>
+        <div className={`grid ${isLoadingModals && "hidden"}`}>
           {listModels?.map((el: ListModels, index: number) => {
             return (
               <div key={index} className={`col-12 lg:col-4 p-3`}>
@@ -80,9 +80,8 @@ const Uppload = () => {
             );
           })}
         </div>
-        <EskeletonCardUpload open={loadingModels} />
+        <EskeletonCardUpload open={isLoadingModals} />
       </div>
-
       <InfoResponse />
     </Layout>
   );
@@ -96,7 +95,7 @@ function EskeletonCardUpload({ open }: any) {
       {[...Array(6)].map((e: any, index: number) => {
         return (
           <div key={index} className="col-12 lg:col-4 p-3">
-            <Skeleton height="17.4em"></Skeleton>
+            <Skeleton height="17.4em" />
           </div>
         );
       })}

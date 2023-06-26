@@ -9,7 +9,7 @@ const LoadingScreen = () => {
         left: 0,
         right: 0,
         bottom: 0,
-        background: "#ffffff", // Color de fondo de la pantalla de carga
+
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -17,13 +17,16 @@ const LoadingScreen = () => {
       }}
     >
       <div style={{ width: "200px" }}>
-        <img className="mb-3" src="https://www.onsv.gob.pe/img/logosamu.jpg" alt="" />
+        <img
+          className="mb-3"
+          src="https://res.cloudinary.com/ddksrkond/image/upload/v1687315829/samu/download-removebg-preview_iidvap.png"
+          alt=""
+        />
 
         <ProgressBar
           mode="indeterminate"
-          style={{ height: "3px",background:"white" }}
-         color="red" 
-                  
+          style={{ height: "3px", background: "transparent" }}
+          color="red"
         ></ProgressBar>
       </div>
     </div>

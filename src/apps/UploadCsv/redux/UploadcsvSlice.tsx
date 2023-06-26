@@ -31,7 +31,8 @@ export const UploadcsvState: UploadcsvStateType = {
   listModels: [],
   delimiter: ";",
   encode:"utf-8",
-  networkerror:false
+  networkerror: false,
+  isLoadingModals:false
 };
 
 const createReducer = (

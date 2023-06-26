@@ -4,11 +4,6 @@ import { getTokensFromLocalStorage } from "../../services/token-service";
 import { verifyTokenReducer } from "../LoginSlice";
 
 export const verifyToken = async (dispatch: Dispatch<any>) => {
-  dispatch(
-    verifyTokenReducer({
-      isLoading: true,
-    })
-  );
   const { tokens } = getTokensFromLocalStorage();
 
   const { isSuccess } = await fetchVerifyToken(tokens?.accessToken || "");

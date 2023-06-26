@@ -17,13 +17,7 @@ const Login = () => {
   });
   const dispatch = useDispatch();
   const router = useRouter();
-  const {
-    loginWithEmail,
-    isLoading,
-    loginErrors,
-    clearErrors,
-    isAuthenticated,
-  } = useLogin();
+  const { loginWithEmail, isLoading, loginErrors, clearErrors } = useLogin();
 
   useEffect(() => {
     const f = async () => {
@@ -46,8 +40,9 @@ const Login = () => {
           />
         </div>
         <div className="flex flex-col text-sm rounded-md">
-          <div className="flex flex-column gap-2">
+          <div className="mb-2" style={{ maxWidth: "235px" }}>
             <InputText
+              className="w-full"
               onChange={(e) => {
                 clearErrors();
                 setLoginForm({
@@ -58,18 +53,15 @@ const Login = () => {
               id="email"
               value={loginForm.email}
               type="email"
-              aria-describedby="email-help"
               placeholder="Email"
             />
-            <small id="email-help" style={{ color: "red", maxWidth: "250px" }}>
-              {loginErrors?.email}
-            </small>
           </div>
-
-          <div className="flex flex-column gap-2 w-full">
+          <small id="email-help" style={{ color: "red", maxWidth: "234px" }}>
+            {loginErrors?.email}
+          </small>
+          <div className="w-full">
             <Password
               placeholder="Password"
-              className="w-full"
               value={loginForm.password}
               onChange={(e) => {
                 clearErrors();
@@ -82,13 +74,14 @@ const Login = () => {
               feedback={false}
             />
           </div>
-          <small id="pass-help" style={{ color: "red", maxWidth: "250px" }}>
+          <small id="pass-help" style={{ color: "red", maxWidth: "240px" }}>
             {loginErrors?.detail}
             {loginErrors?.password}
           </small>
         </div>
         <button
           onClick={() => loginWithEmail(loginForm)}
+          style={{ maxWidth: "235px" }}
           className="flex justify-center items-center mt-3 w-full border p-1 bg-gradient-to-r from-red-800 via-red-500 to-red-300 text-white rounded-[4px] hover:bg-red-400 transition-colors duration-300"
           type="submit"
         >
@@ -97,7 +90,7 @@ const Login = () => {
         </button>
 
         <div className="mt-2 flex justify-between text-sm text-gray-600">
-          <Link href="#" className="underline">
+          <Link href="/forgot-password" className="underline">
             Olvido su contraseña?
           </Link>
           <Link href="/register" className="underline">

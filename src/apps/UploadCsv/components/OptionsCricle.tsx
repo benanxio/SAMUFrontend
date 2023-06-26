@@ -57,7 +57,7 @@ export default function OptionsCircle({ nameModel = "d" }: any) {
           header={nameModel.toUpperCase()}
           visible={visible}
           position={"bottom"}
-          style={{ width: "50vw" }}
+          
           onHide={() => setVisible(false)}
           draggable={false}
           resizable={false}

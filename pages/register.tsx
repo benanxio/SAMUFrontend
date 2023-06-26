@@ -2,26 +2,28 @@ import LoaderSpinner from "@/src/apps/Common/components/LoaderSpinner";
 import { verifyToken } from "@/src/apps/Login/redux/useCases/verify-token";
 import useRegister from "@/src/apps/Register/hooks/useRegister";
 import { UserAuthRegister } from "@/src/apps/Register/register.models";
-import { RootState } from "@/src/redux/store";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const Register = () => {
-  const dispatch = useDispatch();
   const [registerForm, setRegisterForm] = useState<UserAuthRegister>({
     email: "",
     nickname: "",
     password: "",
     re_password: "",
+    last_name: "",
+    first_name: "",
   });
+  const dispatch = useDispatch();
   const router = useRouter();
-  const { signNupWithEmail, errors, signupLoading, isSendEmail } =
+
+  const { signNupWithEmail, errors, signupLoading, isSendEmail, clearErrors } =
     useRegister();
-  const { isAuthenticated } = useSelector((state: RootState) => state.Login);
+
   useEffect(() => {
     const f = async () => {
       let isS = await verifyToken(dispatch);
@@ -44,6 +46,34 @@ const Register = () => {
         </div>
         <div className="flex flex-col text-sm rounded-md">
           <div className="flex flex-col text-sm rounded-md">
+            <InputText
+              onChange={(e) => {
+                setRegisterForm({
+                  ...registerForm,
+                  first_name: e.target.value,
+                });
+              }}
+              id="names"
+              value={registerForm.first_name}
+              type="text"
+              aria-describedby="usename-help"
+              placeholder="Introduce tus nombres"
+              className="mt-2 w-full"
+            />
+            <InputText
+              onChange={(e) => {
+                setRegisterForm({
+                  ...registerForm,
+                  last_name: e.target.value,
+                });
+              }}
+              id="last_names"
+              value={registerForm.last_name}
+              type="text"
+              aria-describedby="usename-help"
+              placeholder="Introduce tus apellidos"
+              className="mt-2 w-full"
+            />
             <InputText
               onChange={(e) => {
                 setRegisterForm({
@@ -146,6 +176,7 @@ const Register = () => {
           className="flex justify-center items-center  mt-3 w-full border p-2 bg-gradient-to-r from-red-800 via-red-500 to-red-300 text-white rounded-[4px] hover:bg-red-400 transition-colors duration-300"
           type="submit"
           onClick={() => {
+            clearErrors();
             signNupWithEmail(registerForm);
           }}
         >

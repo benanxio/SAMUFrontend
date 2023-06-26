@@ -1,20 +1,21 @@
 import { siteURL } from "@/src/lib/envs";
 import {
-    ServiceFetchResponse,
-    responseServiceState,
-    returnNetworkError,
+  ServiceFetchResponse,
+  responseServiceState,
+  returnNetworkError,
 } from "@/src/lib/error-https-services";
 import axios, { AxiosResponse, CancelTokenSource } from "axios";
-import { ResetPasswordAuth } from "../auth.models";
 
 const resetPasswordFetch = async (
-  data: ResetPasswordAuth
+  email: string
 ): Promise<ServiceFetchResponse> => {
   const source: CancelTokenSource = axios.CancelToken.source();
   try {
     const response: AxiosResponse = await axios.post(
-      `${siteURL}/users/reset_password_confirm/`,
-      data,
+      `${siteURL}/auth/users/reset_password/`,
+      {
+        email,
+      },
       {
         cancelToken: source.token,
       }

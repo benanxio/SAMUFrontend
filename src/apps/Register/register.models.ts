@@ -3,6 +3,8 @@ export interface UserAuthRegister {
   nickname?: string;
   password?: string;
   re_password?: string;
+  last_name?: string;
+  first_name?: string;
 }
 
 export interface RegisterStateType {
@@ -19,6 +21,7 @@ export interface RegisterErrors {
   re_password?: string[];
   nickname?: string[];
   non_field_errors?: string[];
+  token?: string[];
 }
 
 export interface UserRegisterData {

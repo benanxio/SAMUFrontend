@@ -1,20 +1,19 @@
-import { showAlert, showNoti } from "@/src/apps/Common/redux/NotificationSlice";
-import { ResetPasswordAuth } from "../../auth.models";
+import { showNoti } from "@/src/apps/Common/redux/NotificationSlice";
 import resetPasswordFetch from "../../services/reset-password-fetch";
 import { resetPasswordReducer } from "../AuthSlice";
 
-const resetPassword = async (data: ResetPasswordAuth, dispatch: any) => {
+const resetPassword = async (email: string, dispatch: any) => {
   dispatch(
     resetPasswordReducer({
       isLoading: true,
     })
   );
-  const { isSuccess, errors } = await resetPasswordFetch(data);
+  const { isSuccess, errors } = await resetPasswordFetch(email);
   if (isSuccess) {
     dispatch(
-      showAlert({
-        messageAlert: "Actualizacion de contraseña exitosa.",
-        typeAlert: "Success",
+      showNoti({
+        type: "success",
+        message: "Se ha enviado un correo para recuperar su contraseña.",
       })
     );
 
@@ -27,8 +26,8 @@ const resetPassword = async (data: ResetPasswordAuth, dispatch: any) => {
   } else {
     dispatch(
       showNoti({
-        message: "No se pudo actualizar la contraseña.",
-        type: "Fail",
+        message: "No se pudo enviar el correo.Hub un fallo.",
+        type: "error",
       })
     );
 

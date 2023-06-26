@@ -40,6 +40,7 @@
     "next": "13.0.3",
     "next-auth": "^4.20.1",
     "next-auth-client": "^1.5.0",
+    "nextjs-progressbar": "^0.0.16",
     "nprogress": "^0.2.0",
     "postcss": "8.4.23",
     "primeflex": "^3.3.1",

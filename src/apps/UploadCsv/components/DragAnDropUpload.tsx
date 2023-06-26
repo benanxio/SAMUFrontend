@@ -25,7 +25,6 @@ export default function DragAnDrop({ setVisible, headerTitle }: any) {
     useUpload();
   const { setVisibleWithoutModal } = useContext(UIContext);
 
-
   const chooseOptions = {
     icon: "pi pi-fw pi-file-import",
     iconOnly: true,
@@ -36,7 +35,7 @@ export default function DragAnDrop({ setVisible, headerTitle }: any) {
     const file = inFile as File;
     return (
       <div className="flex align-items-center flex-wrap">
-        <div className="flex align-items-center" style={{ width: "40%" }}>
+        <div className="flex align-items-center">
           <span className="flex flex-column text-left ml-3">
             <span className="text-xs">{file.name}</span>
             <small>{new Date().toLocaleDateString()}</small>
@@ -60,9 +59,10 @@ export default function DragAnDrop({ setVisible, headerTitle }: any) {
 
   return (
     <div>
+       <OptionsUpload />
       <FileUpload
+        className="mt-2"
         uploadHandler={async () => {
-          
           await uploadFileInDB(fileCSV);
           setVisibleWithoutModal(modelSelected);
           setVisible(false);
@@ -82,7 +82,7 @@ export default function DragAnDrop({ setVisible, headerTitle }: any) {
         emptyTemplate={emptyTemplate}
         chooseOptions={chooseOptions}
       />
-      <OptionsUpload />
+     
       <ProgressBar
         mode="indeterminate"
         style={{ height: loadingUpload ? "4px" : "0px" }}

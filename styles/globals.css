@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+  transition: 0.1s all;
+}
 .custom-bold-span span {
   font-weight: bold;
 }

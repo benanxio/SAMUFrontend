@@ -31,6 +31,7 @@ const Activate = ({ uid, token }: Props) => {
           {!isLoadingActivate && <span>Activar Cuenta</span>}
         </button>
         <span className="text-sm text-red-500">{errors?.detail}</span>
+        <span className="text-sm text-red-500">{errors?.token}</span>
 
         <div className="mt-2 flex justify-between text-sm text-gray-600">
           <Link href="/login" className="underline">
